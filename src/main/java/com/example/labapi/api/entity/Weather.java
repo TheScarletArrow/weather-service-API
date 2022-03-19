@@ -14,17 +14,16 @@ public class Weather {
     private String unit;
     private Double temperature;
 
-    @Override
-    public String toString(){
-        return "{" +
-                "\"city\":" + wrap(getCity())+",\n"+
-                "\"unit\":" + wrap(getUnit())+",\n"+
-                "\"temperature\":" + getTemperature()+
-
-                "}";
-    }
-
     private static String wrap(String a) {
         return "\"" + a + "\"";
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"city\":" + wrap(getCity()) + ",\n" +
+                "\"unit\":" + wrap(getUnit()) + ",\n" +
+                "\"temperature\":" + getTemperature() +
+                "}";
     }
 }
