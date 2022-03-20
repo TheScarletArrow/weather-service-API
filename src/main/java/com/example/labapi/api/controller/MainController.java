@@ -59,9 +59,7 @@ public class MainController {
                 else {
                    throw new NoArgumentsException();
                 }
-
                 return ResponseEntity.ok().body(weather);
-
             }
         } catch (NoArgumentsException e) {
             return ResponseEntity.badRequest().body("Missing one or all the arguments, or they are typed incorrectly or have the wrong value");
