@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
-public class CurrentExceptionHandler extends ResponseEntityExceptionHandler {
+public class CurrentExceptionHandler {
     @ExceptionHandler(value = NoSuchCityException.class)
     ResponseEntity<?> wrongCity() {
         Map<String,String> response = new HashMap<>();
@@ -21,9 +21,9 @@ public class CurrentExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = NoArgumentsException.class)
     @ResponseBody
-    Map<String,String> showCustomMessage(Exception e){
+   ResponseEntity<?>  showCustomMessage(Exception e){
         Map<String,String> response = new HashMap<>();
         response.put("status","City is missing in URL");
-        return response;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
