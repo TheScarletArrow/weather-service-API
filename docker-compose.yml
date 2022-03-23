@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  lab-api:
+    build: .
+    image: thescarletarrow/lab-api:tagname
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      appid:
+        ee8a57fd5bfa6b94cba8a993f2f791fd
+      site:
+        https://api.openweathermap.org/data/2.5/weather?q=
