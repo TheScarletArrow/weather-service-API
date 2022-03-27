@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * @author Anton Yurkov
+ * @version 0.0.5
+ */
 @ControllerAdvice
 public class CurrentExceptionHandler {
     @ExceptionHandler(value = NoSuchCityException.class)

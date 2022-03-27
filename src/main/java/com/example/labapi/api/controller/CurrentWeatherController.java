@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * @author Anton Yurkov
+ * @version 0.0.5
+ */
+
 @RestController
 @RequestMapping("/api/v1/current/")
 public class CurrentWeatherController {

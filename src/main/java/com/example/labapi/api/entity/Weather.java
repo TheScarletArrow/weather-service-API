@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+/**
+ * @author Anton Yurkov
+ * @version 0.0.5
+ */
 @Data
 @Builder
 @NoArgsConstructor

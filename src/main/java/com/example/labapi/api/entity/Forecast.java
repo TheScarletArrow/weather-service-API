@@ -4,6 +4,10 @@ import lombok.*;
 
 import java.util.HashMap;
 
+/**
+ * @author Anton Yurkov
+ * @version 0.0.5
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

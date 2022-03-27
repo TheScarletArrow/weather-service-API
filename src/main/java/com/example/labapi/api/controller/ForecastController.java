@@ -23,6 +23,10 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * @author Anton Yurkov
+ * @version 0.0.5
+ */
 @RestController
 @RequestMapping(path = "/api/v1/forecast/")
 public class ForecastController {
@@ -42,7 +46,7 @@ public class ForecastController {
         if (StringUtils.isBlank(city)) {
             throw new NoArgumentsException("City not set");
         }
-        if (StringUtils.isBlank(units) || units == null|| !StringUtils.equals(city, "imperial")) {
+        if (StringUtils.isBlank(units) || units == null || !StringUtils.equals(city, "imperial")) {
             units = "metric";
         }
 
