@@ -27,16 +27,15 @@ public class CurrentWeatherController {
 
     @GetMapping("/")
     public ResponseEntity<?> hello(@RequestParam(value = "city", required = false) String city, @RequestParam(value = "units", required = false) String units) throws IOException {
-        if(StringUtils.isBlank(city) )
-        {
+        if (StringUtils.isBlank(city)) {
             throw new NoArgumentsException("City not set");
         }
         try {
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .build();
-            if (StringUtils.isBlank(units)) units="metric";
+            if (StringUtils.isBlank(units)) units = "metric";
             Request request = new Request.Builder()
-                    .url(site + city + "&appid=" + token + "&units="+units)
+                    .url(site + city + "&appid=" + token + "&units=" + units)
                     .method("GET", null)
                     .build();
             Response response = client.newCall(request).execute();
@@ -49,13 +48,11 @@ public class CurrentWeatherController {
                 int indexOfTempEnd = responseAsString.indexOf(',', indexOfTemp);
                 String substring = responseAsString.substring(indexOfTemp - 1, indexOfTempEnd);
                 double temperature = Double.parseDouble(substring.substring(substring.indexOf(":") + 1));
-                if (units.equals("metric")||units.equals("imperial"))
-                {
+                if (units.equals("metric") || units.equals("imperial")) {
                     weather.setTemperature(temperature);
                     weather.setUnit(units);
-                }
-                else {
-                   throw new NoArgumentsException();
+                } else {
+                    throw new NoArgumentsException();
                 }
                 return ResponseEntity.ok().body(weather);
             }
