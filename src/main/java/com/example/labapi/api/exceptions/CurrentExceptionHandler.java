@@ -20,9 +20,16 @@ public class CurrentExceptionHandler {
 
     @ExceptionHandler(value = NoArgumentsException.class)
     @ResponseBody
-   ResponseEntity<?>  showCustomMessage(Exception e){
+   ResponseEntity<?>  showCustomMessage(){
         Map<String,String> response = new HashMap<>();
         response.put("status","City is missing in URL");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(value = WrongDTException.class)
+    ResponseEntity<?> showWrongDT(){
+        Map<String,String> response = new HashMap<>();
+        response.put("status","dt is set wrong in URL");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }
