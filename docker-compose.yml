@@ -1,9 +1,21 @@
 version: "3.9"
 
 services:
-  lab-api:
+  lab-api1:
     build: .
-    image: thescarletarrow/lab-api:test
+    image: thescarletarrow/lab-api:0.0.5
     restart: always
     ports:
-      - "8080:8080"
+      - "8081:8080"
+  lab-api2:
+    build: .
+    image: thescarletarrow/lab-api:0.0.5
+    restart: always
+    ports:
+      - "8082:8080"
+  redis:
+    build: .
+    image: redis
+    ports:
+      - "6379:6379"
+

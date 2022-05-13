@@ -3,17 +3,17 @@ package com.example.labapi.api.controller;
 import com.example.labapi.api.entity.Weather;
 import com.example.labapi.api.exceptions.NoArgumentsException;
 import com.example.labapi.api.exceptions.NoSuchCityException;
+import com.example.labapi.api.service.WeatherService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -30,8 +30,12 @@ public class CurrentWeatherController {
     @Value("${site}")
     String site;
 
-    @GetMapping("/")
-    public ResponseEntity<?> hello(@RequestParam(value = "city", required = false) String city, @RequestParam(value = "units", required = false) String units) throws IOException {
+    @Autowired
+    private WeatherService weatherService;
+
+    @PutMapping("/")
+    public ResponseEntity<?> hello(@RequestParam(value = "city", required = false) String city,
+                                   @RequestParam(value = "units", required = false) String units) throws IOException {
         if (StringUtils.isBlank(city)) {
             throw new NoArgumentsException("City not set");
         }
@@ -55,15 +59,21 @@ public class CurrentWeatherController {
                 double temperature = Double.parseDouble(substring.substring(substring.indexOf(":") + 1));
                 if (units.equals("metric") || units.equals("imperial")) {
                     weather.setTemperature(temperature);
-                    weather.setUnit(units);
+                    weather.setUnits(units);
                 } else {
                     throw new NoArgumentsException();
                 }
-                return ResponseEntity.ok().body(weather);
+                weatherService.save(weather);
+                return ResponseEntity.ok("");
             }
         } catch (NoArgumentsException e) {
             return ResponseEntity.badRequest().body("Missing one or all the arguments, or they are typed incorrectly or have the wrong value");
         }
         return ResponseEntity.accepted().body("Hmm");
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> get(@RequestParam String city){
+        return ResponseEntity.ok(weatherService.get("weather_"+city));
     }
 }
