@@ -9,12 +9,14 @@ public class GrpcClient{
                 .usePlaintext()
                 .build();
 
-        HelloServiceGrpc.HelloServiceBlockingStub stub
-                = HelloServiceGrpc.newBlockingStub(channel);
+        RequestAuth.HelloServiceBlockingStub stub
+                = RequestAuth.newBlockingStub(channel);
 
-        HelloResponse helloResponse = stub.hello(HelloRequest.newBuilder()
+        ResponseAuth helloResponse = stub.hello(RequestAuth.newBuilder()
                 .setName("Anton")
                 .build());
+
+
 
     }
 
