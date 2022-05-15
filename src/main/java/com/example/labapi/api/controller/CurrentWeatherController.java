@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -64,16 +66,23 @@ public class CurrentWeatherController {
                     throw new NoArgumentsException();
                 }
                 weatherService.save(weather);
+                response.close();
                 return ResponseEntity.ok("");
             }
         } catch (NoArgumentsException e) {
             return ResponseEntity.badRequest().body("Missing one or all the arguments, or they are typed incorrectly or have the wrong value");
         }
+
         return ResponseEntity.accepted().body("Hmm");
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> get(@RequestParam String city){
-        return ResponseEntity.ok(weatherService.get("weather_"+city));
+    public ResponseEntity<?> get(@RequestParam String city, HttpServletResponse response, HttpServletRequest request) throws IOException {
+//        if (hello(city, "metrics").getStatusCodeValue()==404) return ResponseEntity.status(404).build();
+        Weather weather = weatherService.get("weather_" + city);
+        if (weather!=null)
+            return ResponseEntity.ok(weather);
+        else
+            return ResponseEntity.status(response.getStatus()).build();
     }
 }
