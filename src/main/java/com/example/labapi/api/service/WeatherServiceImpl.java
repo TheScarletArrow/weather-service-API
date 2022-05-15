@@ -12,8 +12,6 @@ public class WeatherServiceImpl implements WeatherService {
     @Autowired
     private WeatherRepo weatherRepo;
 
-    @Autowired
-    private WeatherRepository weatherRepository;
 
     @Override
     public boolean save(Weather weather) {

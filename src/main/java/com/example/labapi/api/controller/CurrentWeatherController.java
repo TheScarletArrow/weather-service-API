@@ -4,26 +4,26 @@ import com.example.labapi.api.entity.Weather;
 import com.example.labapi.api.exceptions.NoArgumentsException;
 import com.example.labapi.api.exceptions.NoSuchCityException;
 import com.example.labapi.api.service.WeatherService;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 /**
  * @author Anton Yurkov
  * @version 0.0.5
  */
-
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/current/")
 public class CurrentWeatherController {
@@ -32,8 +32,11 @@ public class CurrentWeatherController {
     @Value("${site}")
     String site;
 
-    @Autowired
-    private WeatherService weatherService;
+    private final WeatherService weatherService;
+
+    public CurrentWeatherController(WeatherService weatherService) {
+        this.weatherService = weatherService;
+    }
 
     @PutMapping("/")
     public ResponseEntity<?> hello(@RequestParam(value = "city", required = false) String city,
@@ -67,6 +70,7 @@ public class CurrentWeatherController {
                 }
                 weatherService.save(weather);
                 response.close();
+                log.info("Put"+LocalDateTime.now());
                 return ResponseEntity.ok("");
             }
         } catch (NoArgumentsException e) {
@@ -77,11 +81,13 @@ public class CurrentWeatherController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> get(@RequestParam String city, HttpServletResponse response, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> get(@RequestParam String city, HttpServletResponse response)  {
 //        if (hello(city, "metrics").getStatusCodeValue()==404) return ResponseEntity.status(404).build();
         Weather weather = weatherService.get("weather_" + city);
-        if (weather!=null)
+        if (weather!=null){
+            System.out.println(LocalDateTime.now());
             return ResponseEntity.ok(weather);
+        }
         else
             return ResponseEntity.status(response.getStatus()).build();
     }
