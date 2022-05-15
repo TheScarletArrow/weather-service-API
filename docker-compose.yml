@@ -1,9 +1,28 @@
 version: "3.9"
 
 services:
-  lab-api:
+  lab-api1:
     build: .
-    image: thescarletarrow/lab-api:test
+    image: thescarletarrow/lab-api:0.0.9
     restart: always
+
+  lab-api2:
+    build: .
+    image: thescarletarrow/lab-api:0.0.9
+    restart: always
+
+  redis:
+    build: .
+    image: redis
+    restart: always
+
+  balancer:
+    image: nginx
+    volumes:
+      - ./Balancer/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "8080:8080"
+    depends_on:
+      - lab-api1
+      - lab-api2
+
