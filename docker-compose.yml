@@ -3,7 +3,7 @@ version: "3.9"
 services:
   lab-api1:
     build: .
-    image: thescarletarrow/lab-api:0.0.12
+    image: thescarletarrow/lab-api:0.0.13
     restart: always
     network_mode: weather_net
     depends_on:
