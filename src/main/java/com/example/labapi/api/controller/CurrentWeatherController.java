@@ -32,11 +32,6 @@ public class CurrentWeatherController {
     @Value("${site}")
     String site;
 
-    private final WeatherService weatherService;
-
-    public CurrentWeatherController(WeatherService weatherService) {
-        this.weatherService = weatherService;
-    }
 
     @GetMapping("/")
     public ResponseEntity<?> hello(@RequestParam(value = "city", required = false) String city,
