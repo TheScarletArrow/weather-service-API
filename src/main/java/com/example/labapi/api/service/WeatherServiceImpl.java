@@ -2,7 +2,6 @@ package com.example.labapi.api.service;
 
 import com.example.labapi.api.entity.Weather;
 import com.example.labapi.api.repository.WeatherRepo;
-import com.example.labapi.api.repository.WeatherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

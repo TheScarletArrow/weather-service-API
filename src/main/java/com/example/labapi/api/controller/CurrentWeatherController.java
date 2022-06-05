@@ -38,7 +38,7 @@ public class CurrentWeatherController {
         this.weatherService = weatherService;
     }
 
-    @PutMapping("/")
+    @GetMapping("/")
     public ResponseEntity<?> hello(@RequestParam(value = "city", required = false) String city,
                                    @RequestParam(value = "units", required = false) String units) throws IOException {
         if (StringUtils.isBlank(city)) {
@@ -68,10 +68,10 @@ public class CurrentWeatherController {
                 } else {
                     throw new NoArgumentsException();
                 }
-                weatherService.save(weather);
+//                weatherService.save(weather);
                 response.close();
                 log.info("Put"+LocalDateTime.now());
-                return ResponseEntity.ok("");
+                return ResponseEntity.ok(weather);
             }
         } catch (NoArgumentsException e) {
             return ResponseEntity.badRequest().body("Missing one or all the arguments, or they are typed incorrectly or have the wrong value");
@@ -80,15 +80,15 @@ public class CurrentWeatherController {
         return ResponseEntity.accepted().body("Hmm");
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> get(@RequestParam String city, HttpServletResponse response)  {
-//        if (hello(city, "metrics").getStatusCodeValue()==404) return ResponseEntity.status(404).build();
-        Weather weather = weatherService.get("weather_" + city);
-        if (weather!=null){
-            System.out.println(LocalDateTime.now());
-            return ResponseEntity.ok(weather);
-        }
-        else
-            return ResponseEntity.status(response.getStatus()).build();
-    }
+//    @GetMapping("/")
+//    public ResponseEntity<?> get(@RequestParam String city, HttpServletResponse response)  {
+////        if (hello(city, "metrics").getStatusCodeValue()==404) return ResponseEntity.status(404).build();
+//        Weather weather = weatherService.get("weather_" + city);
+//        if (weather!=null){
+//            System.out.println(LocalDateTime.now());
+//            return ResponseEntity.ok(weather);
+//        }
+//        else
+//            return ResponseEntity.status(response.getStatus()).build();
+//    }
 }
