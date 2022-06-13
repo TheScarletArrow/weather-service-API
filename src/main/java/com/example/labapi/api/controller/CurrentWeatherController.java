@@ -3,7 +3,7 @@ package com.example.labapi.api.controller;
 import com.example.labapi.api.entity.Weather;
 import com.example.labapi.api.exceptions.NoArgumentsException;
 import com.example.labapi.api.exceptions.NoSuchCityException;
-import com.example.labapi.api.service.WeatherService;
+import com.example.labapi.api.grpc.GrpcClient;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -32,15 +33,17 @@ public class CurrentWeatherController {
     @Value("${site}")
     String site;
 
-    private final WeatherService weatherService;
 
-    public CurrentWeatherController(WeatherService weatherService) {
-        this.weatherService = weatherService;
-    }
 
-    @PutMapping("/")
-    public ResponseEntity<?> hello(@RequestParam(value = "city", required = false) String city,
+    @GetMapping("/")
+    public ResponseEntity<?> hello(HttpServletRequest servletRequest, HttpServletResponse servletResponse,
+                                    @RequestParam(value = "name") String name,
+                                    @RequestParam(value = "city", required = false) String city,
                                    @RequestParam(value = "units", required = false) String units) throws IOException {
+        final boolean authenticated = GrpcClient.getAuthenticated(name);
+        if (!authenticated)
+            return ResponseEntity.status(403).body("Not authenticated");
+
         if (StringUtils.isBlank(city)) {
             throw new NoArgumentsException("City not set");
         }
@@ -68,10 +71,9 @@ public class CurrentWeatherController {
                 } else {
                     throw new NoArgumentsException();
                 }
-                weatherService.save(weather);
                 response.close();
                 log.info("Put"+LocalDateTime.now());
-                return ResponseEntity.ok("");
+                return ResponseEntity.ok(weather);
             }
         } catch (NoArgumentsException e) {
             return ResponseEntity.badRequest().body("Missing one or all the arguments, or they are typed incorrectly or have the wrong value");
@@ -80,15 +82,15 @@ public class CurrentWeatherController {
         return ResponseEntity.accepted().body("Hmm");
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> get(@RequestParam String city, HttpServletResponse response)  {
-//        if (hello(city, "metrics").getStatusCodeValue()==404) return ResponseEntity.status(404).build();
-        Weather weather = weatherService.get("weather_" + city);
-        if (weather!=null){
-            System.out.println(LocalDateTime.now());
-            return ResponseEntity.ok(weather);
-        }
-        else
-            return ResponseEntity.status(response.getStatus()).build();
-    }
+//    @GetMapping("/")
+//    public ResponseEntity<?> get(@RequestParam String city, HttpServletResponse response)  {
+////        if (hello(city, "metrics").getStatusCodeValue()==404) return ResponseEntity.status(404).build();
+//        Weather weather = weatherService.get("weather_" + city);
+//        if (weather!=null){
+//            System.out.println(LocalDateTime.now());
+//            return ResponseEntity.ok(weather);
+//        }
+//        else
+//            return ResponseEntity.status(response.getStatus()).build();
+//    }
 }

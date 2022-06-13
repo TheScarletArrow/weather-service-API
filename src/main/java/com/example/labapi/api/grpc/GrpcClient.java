@@ -1,25 +1,24 @@
 package com.example.labapi.api.grpc;
 
-import com.example.labapi.api.Auth;
+
+import com.example.labapi.Auth12;
+import com.example.labapi.AuthServiceGrpc12;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import io.lettuce.core.AbstractRedisAsyncCommands;
-import lombok.var;
 
 public class GrpcClient {
 
-    ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 5000)
-            .usePlaintext()
-            .build();
 
+    public static  boolean getAuthenticated(String name) {
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 5000)
+                .usePlaintext()
+                .build();
+        AuthServiceGrpc12.AuthServiceBlockingStub stub = AuthServiceGrpc12.newBlockingStub(channel);
 
-    var stub = AuthServiceGrpc.newBlockingStub(channel);
-    Auth.ResponseAuth responseAuth = stub.auth(
-            Auth.RequestAuth.newBuilder()
-                    .setName("Anton")
-    )
+        Auth12.ResponseAuth responseAuth = stub.auth(Auth12.RequestAuth.newBuilder()
+                .setName(name)
+                .build());
+        return responseAuth.getAuthenticated();
 
-
+    }
 }

@@ -2,7 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "Auth";
 option java_package = "com.example.labapi";
-
 package auth;
 
 message RequestAuth {
