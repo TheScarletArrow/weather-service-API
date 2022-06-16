@@ -18,6 +18,7 @@ public class GrpcClient {
         Auth12.ResponseAuth responseAuth = stub.auth(Auth12.RequestAuth.newBuilder()
                 .setName(name)
                 .build());
+        channel.shutdown();
         return responseAuth.getAuthenticated();
 
     }

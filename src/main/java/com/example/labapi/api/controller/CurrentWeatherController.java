@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -33,13 +32,12 @@ public class CurrentWeatherController {
     @Value("${site}")
     String site;
 
-
-
     @GetMapping("/")
     public ResponseEntity<?> hello(HttpServletRequest servletRequest, HttpServletResponse servletResponse,
-                                    @RequestParam(value = "name") String name,
+                                   // @RequestParam(value = "name") String name,
                                     @RequestParam(value = "city", required = false) String city,
                                    @RequestParam(value = "units", required = false) String units) throws IOException {
+        String name=servletRequest.getHeader("Own-Auth-UserName");
         final boolean authenticated = GrpcClient.getAuthenticated(name);
         if (!authenticated)
             return ResponseEntity.status(403).body("Not authenticated");
