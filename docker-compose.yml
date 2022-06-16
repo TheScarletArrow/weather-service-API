@@ -3,7 +3,7 @@ version: "3.9"
 services:
   lab-api1:
     build: .
-    image: sha256:59b96367fbb8534f41dbb6131237c29404f14bb037c2d52a430a4f1da1a5c8b7
+    image: sha256:a8bc09a36fbc26b76c6944e178af2ec6e61b8728727b05cb710c849a6e51f4f0
     restart: always
     network_mode: samla
     ports:
@@ -49,6 +49,14 @@ services:
         monitoring:
           aliases:
               - prometheus
+  grpc:
+    container_name: grpc
+    image: sha256:c5563ce3c95ae25099529194bd51a77d4edb6f1c56c21eff38f9b9b2d860bdce
+    build: .
+    ports:
+      - "5000:5000"
+    network_mode: samla
+
 networks:
 
   monitoring:

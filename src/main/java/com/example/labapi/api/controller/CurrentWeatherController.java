@@ -1,9 +1,9 @@
 package com.example.labapi.api.controller;
 
+import com.example.labapi.GRPC.GrpcClient;
 import com.example.labapi.api.entity.Weather;
 import com.example.labapi.api.exceptions.NoArgumentsException;
 import com.example.labapi.api.exceptions.NoSuchCityException;
-import com.example.labapi.api.service.WeatherService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -32,10 +32,16 @@ public class CurrentWeatherController {
     @Value("${site}")
     String site;
 
-
     @GetMapping("/")
-    public ResponseEntity<?> hello(@RequestParam(value = "city", required = false) String city,
+    public ResponseEntity<?> hello(HttpServletRequest servletRequest, HttpServletResponse servletResponse,
+                                   // @RequestParam(value = "name") String name,
+                                    @RequestParam(value = "city", required = false) String city,
                                    @RequestParam(value = "units", required = false) String units) throws IOException {
+        String name=servletRequest.getHeader("Own-Auth-UserName");
+        final boolean authenticated = GrpcClient.getAuthenticated(name);
+        if (!authenticated)
+            return ResponseEntity.status(403).body("Not authenticated");
+
         if (StringUtils.isBlank(city)) {
             throw new NoArgumentsException("City not set");
         }
@@ -63,7 +69,6 @@ public class CurrentWeatherController {
                 } else {
                     throw new NoArgumentsException();
                 }
-//                weatherService.save(weather);
                 response.close();
                 log.info("Put"+LocalDateTime.now());
                 return ResponseEntity.ok(weather);
