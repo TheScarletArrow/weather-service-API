@@ -1,4 +1,4 @@
-package com.example.labapi.GRPC;
+package com.example.labapi.grpc;
 
 
 import com.example.labapi.Auth;
@@ -13,6 +13,7 @@ public class GrpcClient {
         ManagedChannel channel = ManagedChannelBuilder.forAddress("grpc", 5000)
                 .usePlaintext()
                 .build();
+
         AuthServiceGrpc.AuthServiceBlockingStub stub = AuthServiceGrpc.newBlockingStub(channel);
 
         Auth.ResponseAuth responseAuth = stub.auth(Auth.RequestAuth.newBuilder()

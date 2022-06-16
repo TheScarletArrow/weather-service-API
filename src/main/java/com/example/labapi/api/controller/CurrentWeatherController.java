@@ -1,6 +1,6 @@
 package com.example.labapi.api.controller;
 
-import com.example.labapi.GRPC.GrpcClient;
+import com.example.labapi.grpc.GrpcClient;
 import com.example.labapi.api.entity.Weather;
 import com.example.labapi.api.exceptions.NoArgumentsException;
 import com.example.labapi.api.exceptions.NoSuchCityException;
