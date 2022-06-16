@@ -3,12 +3,12 @@ version: "3.9"
 services:
   lab-api1:
     build: .
-    image: sha256:a8bc09a36fbc26b76c6944e178af2ec6e61b8728727b05cb710c849a6e51f4f0
+    image: sha256:88ee2afa6694e4c9bc2e3564aed602e7fb56c4a0a5c1c9605b5e7f031720b12e
     restart: always
     network_mode: samla
     ports:
       - "8080:8080"
-
+    container_name: java_backend
 #  lab-api2:
 #    build: .
 #    image: thescarletarrow/lab-api:0.0.9

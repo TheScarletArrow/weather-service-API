@@ -10,6 +10,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,10 +38,11 @@ public class CurrentWeatherController {
                                    // @RequestParam(value = "name") String name,
                                     @RequestParam(value = "city", required = false) String city,
                                    @RequestParam(value = "units", required = false) String units) throws IOException {
-        String name=servletRequest.getHeader("Own-Auth-UserName");
+        final String OWN_AUTH_USERNAME = "Own-Auth-UserName";
+        String name=servletRequest.getHeader(OWN_AUTH_USERNAME);
         final boolean authenticated = GrpcClient.getAuthenticated(name);
         if (!authenticated)
-            return ResponseEntity.status(403).body("Not authenticated");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(name+" is not authenticated");
 
         if (StringUtils.isBlank(city)) {
             throw new NoArgumentsException("City not set");
