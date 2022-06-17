@@ -9,6 +9,7 @@ services:
     ports:
       - "8080:8080"
     container_name: java_backend
+
 #  lab-api2:
 #    build: .
 #    image: thescarletarrow/lab-api:0.0.9
@@ -29,6 +30,7 @@ services:
 #      - lab-api1
 #      - lab-api2
   grafana:
+    restart: always
     build: 'config/grafana'
     ports:
       - 3000:3000
@@ -40,15 +42,16 @@ services:
         aliases:
           - grafana
   prometheus:
-      image: prom/prometheus
-      ports:
+    restart: always
+    image: prom/prometheus
+    ports:
         - 9090:9090
-      volumes:
+    volumes:
         - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-      networks:
-        monitoring:
-          aliases:
-              - prometheus
+    networks:
+      monitoring:
+        aliases:
+            - prometheus
   grpc:
     container_name: grpc
     image: sha256:c5563ce3c95ae25099529194bd51a77d4edb6f1c56c21eff38f9b9b2d860bdce
@@ -56,6 +59,7 @@ services:
     ports:
       - "5000:5000"
     network_mode: samla
+    restart: always
 
 networks:
 
