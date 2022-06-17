@@ -1,17 +1,25 @@
 package com.example.labapi.api.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+
+import java.io.Serializable;
+
+/**
+ * @author Anton Yurkov
+ * @version 0.0.5
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Weather {
+@RedisHash("weather")
+public class Weather implements Serializable {
+    @Id
     private String city;
-    private String unit;
+    private String units;
     private Double temperature;
 
     private static String wrap(String a) {
@@ -22,7 +30,7 @@ public class Weather {
     public String toString() {
         return "{" +
                 "\"city\":" + wrap(getCity()) + ",\n" +
-                "\"unit\":" + wrap(getUnit()) + ",\n" +
+                "\"unit\":" + wrap(getUnits()) + ",\n" +
                 "\"temperature\":" + getTemperature() +
                 "}";
     }

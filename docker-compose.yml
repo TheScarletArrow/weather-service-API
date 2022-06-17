@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  lab-api1:
+    build: .
+    image: sha256:88ee2afa6694e4c9bc2e3564aed602e7fb56c4a0a5c1c9605b5e7f031720b12e
+    restart: always
+    network_mode: samla
+    ports:
+      - "8080:8080"
+    container_name: java_backend
+
+#  lab-api2:
+#    build: .
+#    image: thescarletarrow/lab-api:0.0.9
+#    restart: always
+#
+#  redis:
+#    build: .
+#    image: redis
+#    restart: always
+
+#  balancer:
+#    image: nginx
+#    volumes:
+#      - ./Balancer/nginx.conf:/etc/nginx/nginx.conf
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - lab-api1
+#      - lab-api2
+  grafana:
+    restart: always
+    build: 'config/grafana'
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      monitoring:
+        aliases:
+          - grafana
+  prometheus:
+    restart: always
+    image: prom/prometheus
+    ports:
+        - 9090:9090
+    volumes:
+        - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      monitoring:
+        aliases:
+            - prometheus
+  grpc:
+    container_name: grpc
+    image: sha256:c5563ce3c95ae25099529194bd51a77d4edb6f1c56c21eff38f9b9b2d860bdce
+    build: .
+    ports:
+      - "5000:5000"
+    network_mode: samla
+    restart: always
+
+networks:
+
+  monitoring:
